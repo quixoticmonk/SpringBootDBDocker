@@ -11,6 +11,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,14 +45,33 @@ public class AppControllerTest {
     }
 
     @Test
-    void shouldCallService(){
-        Mockito.when(appService.returnHello()).thenReturn("Hello");
+    void shouldCallServiceForAllBooks(){
+        List<String> testResponseList = new ArrayList<>();
+        testResponseList.add("Book1");
+        testResponseList.add("Book2");
+        testResponseList.add("Book3");
+        Mockito.when(appService.returnBooks()).thenReturn(testResponseList);
 
-        assertThat(appController.returnBooks()).isEqualTo("Hello");
-        Mockito.verify(appService,times(1)).returnHello();
+        List<String> responseList = Arrays.asList("Book1", "Book2", "Book3");
+        assertThat(appController.returnBooks()).isEqualTo(responseList);
+        Mockito.verify(appService,times(1)).returnBooks();
+    }
+
+    @Test
+    void shouldHaveEndpointWithOneBook() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/Books/1"))
+                .andExpect(status().isOk());
     }
 
 
+    @Test
+    void shouldCallServiceForFindBookById(){
+        String testResponse = "Book1";
+        String id = "1";
+        Mockito.when(appService.returnBookById("1")).thenReturn(testResponse);
+        assertThat(appController.returnBookById(id)).isEqualTo("Book1");
+        Mockito.verify(appService,times(1)).returnBookById("1");
+    }
 
 
 }
