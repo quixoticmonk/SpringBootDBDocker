@@ -1,18 +1,22 @@
 package org.example;
 
 
+import org.example.controller.AppController;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class AppTest
 {
+    @Autowired
+    private AppController controller;
+
     @Test
-    public void shouldAnswerWithTrue()
+    public void contextLoads()
     {
-        assertTrue( true );
+        assertThat(controller).isNotNull();
     }
 }
