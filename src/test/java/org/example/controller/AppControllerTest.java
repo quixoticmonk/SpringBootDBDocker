@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -50,11 +50,11 @@ public class AppControllerTest {
         testResponseList.add("Book1");
         testResponseList.add("Book2");
         testResponseList.add("Book3");
-        Mockito.when(appService.returnBooks()).thenReturn(testResponseList);
+        when(appService.returnBooks()).thenReturn(testResponseList);
 
         List<String> responseList = Arrays.asList("Book1", "Book2", "Book3");
         assertThat(appController.returnBooks()).isEqualTo(responseList);
-        Mockito.verify(appService,times(1)).returnBooks();
+        verify(appService,times(1)).returnBooks();
     }
 
     @Test
@@ -68,9 +68,9 @@ public class AppControllerTest {
     void shouldCallServiceForFindBookById(){
         String testResponse = "Book1";
         String id = "1";
-        Mockito.when(appService.returnBookById("1")).thenReturn(testResponse);
+        when(appService.returnBookById("1")).thenReturn(testResponse);
         assertThat(appController.returnBookById(id)).isEqualTo("Book1");
-        Mockito.verify(appService,times(1)).returnBookById("1");
+        verify(appService,times(1)).returnBookById("1");
     }
 
 
