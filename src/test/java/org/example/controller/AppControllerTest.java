@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -59,8 +60,8 @@ public class AppControllerTest {
     @DisplayName("Should invoke Service Class for Books/{id} endpoint")
     void shouldCallServiceForABookEndPoint(){
         Book book = new Book(1,"","Orhan Pamuk");
-        when(appService.returnBook(any())).thenReturn(book);
-        assertThat(appController.returnBook("1").getAuthorName()).isEqualTo("Orhan Pamuk");
+        when(appService.returnBook(any())).thenReturn(Optional.of(book));
+        assertThat(appController.returnBook(1).get().getAuthorName()).isEqualTo("Orhan Pamuk");
         verify(appService,times(1)).returnBook(any());
     }
 

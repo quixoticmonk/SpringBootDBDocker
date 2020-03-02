@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AppController {
@@ -21,7 +22,7 @@ public class AppController {
     }
 
     @GetMapping("/Books/{id}")
-    public Book returnBook(@PathVariable("id") final String id){
+    public Optional<Book> returnBook(@PathVariable("id") final int id){
         return appService.returnBook(id);
     }
 
