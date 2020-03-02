@@ -17,4 +17,7 @@ public class AppService {
         return (List<Book>) appRepository.findAll();
     }
 
+    public Book returnBook(String id) {
+        return new Book();
+    }
 }

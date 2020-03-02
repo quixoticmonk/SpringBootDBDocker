@@ -3,6 +3,7 @@ package org.example.controller;
 
 import org.example.model.Book;
 import org.example.service.AppService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -38,6 +39,13 @@ public class AppControllerTest {
     }
 
     @Test
+    void shouldHaveEndpointForABook() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/Books/1"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Should invoke Service Class for Books endpoint")
     void shouldCallServiceForAllBooks(){
         List<Book> booksList = new ArrayList<>();
         Book book = new Book(1,"","");
@@ -47,8 +55,14 @@ public class AppControllerTest {
         verify(appService,times(1)).returnBooks();
     }
 
-
-
+    @Test
+    @DisplayName("Should invoke Service Class for Books/{id} endpoint")
+    void shouldCallServiceForABookEndPoint(){
+        Book book = new Book(1,"","Orhan Pamuk");
+        when(appService.returnBook(any())).thenReturn(book);
+        assertThat(appController.returnBook("1").getAuthorName()).isEqualTo("Orhan Pamuk");
+        verify(appService,times(1)).returnBook(any());
+    }
 
 
 }
