@@ -1,10 +1,9 @@
 package org.example.repository;
 
+import org.example.model.Book;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class AppRepository {
-    public String getBookById(String s) {
-        return null;
-    }
+public interface AppRepository extends CrudRepository<Book,String> {
 }

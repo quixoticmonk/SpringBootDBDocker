@@ -1,38 +1,23 @@
 package org.example.service;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@SpringBootTest
 public class AppServiceTest {
 
-    AppService appService;
-
-
-    @BeforeEach
-    void setup(){
-        appService= new AppService();
-    }
+    @Autowired
+    private AppService appService;
 
     @Test
-    void shouldHaveAMethodToPrintHello(){
+    @DisplayName("Should Return List of Books")
+    void shouldReturnBooks(){
         assertThat(appService.returnBooks()).isNotEmpty();
     }
-
-    @Test
-    void shouldReturnList(){
-        List<String> listofBooks = new ArrayList<>();
-        listofBooks.add("DevOps for a Modern Enterprise");
-        assertThat(appService.returnBooks()).isEqualTo(listofBooks);
-    }
-
 
 
 }
