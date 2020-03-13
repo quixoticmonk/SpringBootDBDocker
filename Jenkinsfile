@@ -57,7 +57,7 @@ pipeline {
                         sh"mvn org.pitest:pitest-maven:mutationCoverage"
                     }
                 }
-                stage('Running mutation Tests') {
+                stage('container scan') {
                     steps {
                         sh"trivy -f json -0 trivy-results.json springboot-docker:latest"
                     }
@@ -106,7 +106,7 @@ pipeline {
             }
         }
 
-                stage("Post Deploy Gates") {
+            stage("Post Deploy Gates") {
             parallel {
                 stage('Karate Tests') {
                     steps {
