@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "mvn clean install -DskipTests=true"
+                sh "mvn clean compile jib:dockerBuild -DskipTests=true"
             }
         }
         stage('Compile test classes') {
@@ -54,7 +54,7 @@ pipeline {
                 }
                 stage('Running mutation Tests') {
                     steps {
-                        echo"Running Pit tests mvn org.pitest:pitest-maven:mutationCoverage"
+                        sh"mvn org.pitest:pitest-maven:mutationCoverage"
                     }
                 }
                 stage('Karate Tests') {
