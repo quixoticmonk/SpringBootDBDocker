@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class AppController {
@@ -16,14 +15,14 @@ public class AppController {
     @Autowired
     private AppService appService ;
 
-    @GetMapping("/Books")
+    @GetMapping("/api/books")
     public List<Book> returnBooks(){
         return appService.returnBooks();
     }
 
-    @GetMapping("/Books/{id}")
-    public Optional<Book> returnBook(@PathVariable("id") final int id){
-        return appService.returnBook(id);
+    @GetMapping("/api/books/{bookName}")
+    public Book returnBook(@PathVariable("bookName") final String bookName){
+        return appService.returnBook(bookName);
     }
 
 }

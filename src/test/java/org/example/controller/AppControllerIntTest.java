@@ -18,7 +18,7 @@ public class AppControllerIntTest {
 
     @Test
     void shouldHitActualEncpoints(){
-        ResponseEntity<String> response=  restTemplate.getForEntity("/Books", String.class);
+        ResponseEntity<String> response=  restTemplate.getForEntity("/api/books", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("[{\"id\":1,\"bookName\":\"Davinci Code\",\"authorName\":\"Dan Brown\"},{\"id\":2,\"bookName\":\"Istanbul\",\"authorName\":\"Orhan Pamuk\"}]");
     }

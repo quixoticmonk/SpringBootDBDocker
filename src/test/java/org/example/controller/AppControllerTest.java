@@ -35,13 +35,13 @@ public class AppControllerTest {
 
     @Test
     void shouldHaveEndpointWithBooks() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/Books"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books"))
                 .andExpect(status().isOk());
     }
 
     @Test
     void shouldHaveEndpointForABook() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/Books/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/books/1"))
                 .andExpect(status().isOk());
     }
 
@@ -57,11 +57,11 @@ public class AppControllerTest {
     }
 
     @Test
-    @DisplayName("Should invoke Service Class for Books/{id} endpoint")
+    @DisplayName("Should invoke Service Class for/api/books/{id} endpoint")
     void shouldCallServiceForABookEndPoint(){
-        Book book = new Book(1,"","Orhan Pamuk");
-        when(appService.returnBook(any())).thenReturn(Optional.of(book));
-        assertThat(appController.returnBook(1).get().getAuthorName()).isEqualTo("Orhan Pamuk");
+        Book book = new Book(1,"Istanbul","Orhan Pamuk");
+        when(appService.returnBook(any())).thenReturn(book);
+        assertThat(appController.returnBook("Istanbul").getAuthorName()).isEqualTo("Orhan Pamuk");
         verify(appService,times(1)).returnBook(any());
     }
 

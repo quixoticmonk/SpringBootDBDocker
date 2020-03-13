@@ -22,7 +22,7 @@ public class AppServiceTest {
     @Test
     @DisplayName("ReturnBook shouldn't have an empty response")
     void shouldReturnABook(){
-        assertThat(appService.returnBook(1)).isNotNull();
+        assertThat(appService.returnBook("Inferno")).isNotNull();
     }
 
 
