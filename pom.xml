@@ -156,20 +156,12 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>2.1.0</version>
-                <configuration>
-                    <to>
-                        <image>springboot-docker</image>
-                    </to>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <configuration>
+                    <excludes>karate.UserSimulation</excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -214,7 +206,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>test</goal>
                         </goals>

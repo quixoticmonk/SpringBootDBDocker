@@ -37,12 +37,12 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh "mvn clean compile jib:dockerBuild -DskipTests=true"
+                sh "mvn clean package -DskipTests=true"
             }
         }
-        stage('Compile test classes') {
+        stage('Dockerize the app') {
             steps {
-                sh "mvn test-compile"
+                sh "docker build ."
             }
         }
         stage("Quality Gates") {
