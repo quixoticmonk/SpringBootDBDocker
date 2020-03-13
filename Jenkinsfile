@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Dockerize the app') {
             steps {
-                sh "docker build ."
+                sh "docker build . -t springboot-docker -p 8080:8080 -v /var/run/docker.sock:/var/run/docker.sock"
             }
         }
         stage("Quality Gates") {
@@ -57,19 +57,11 @@ pipeline {
                         sh"mvn org.pitest:pitest-maven:mutationCoverage"
                     }
                 }
-                stage('Karate Tests') {
+                stage('Running mutation Tests') {
                     steps {
-                        sh "mvn surefire:test -Dtest=TestRunner"
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Karate test run report', reportTitles: ''])
+                        sh"trivy -f json -0 trivy-results.json springboot-docker:latest"
                     }
                 }
-                stage('Gatling tests') {
-                    steps {
-                        sh "mvn gatling:test"
-                        gatlingArchive()
-                    }
-                }
-
                 stage('Dependency Check') {
                     steps {
                         dependencyCheck additionalArguments: '', odcInstallation: 'depCheck'
@@ -91,10 +83,29 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'CF_API', variable: 'CF_API'), string(credentialsId: 'CF_USER', variable: 'CF_USER'), string(credentialsId: 'CF_PASS', variable: 'CF_PASS')]) {
                     sh "cf login -a ${CF_API} -u ${CF_USER} -p ${CF_PASS} -o ${CF_ORG} -s ${CF_SPACE} "
-                    sh "cf push jenkins-demo -p target/*.jar "
+                    sh "cf push springboot-docker -p target/*.jar "
                 }
             }
         }
+
+        stage("Post deploy Quality Gates") {
+            parallel {
+                  stage('Karate Tests') {
+                    steps {
+                        sh "mvn surefire:test -Dtest=TestRunner"
+                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Karate test run report', reportTitles: ''])
+                    }
+                }
+                stage('Gatling tests') {
+                    steps {
+                        sh "mvn gatling:test"
+                        gatlingArchive()
+                    }
+                }
+
+            }
+        }
+
                 stage("Post Deploy Gates") {
             parallel {
                 stage('Karate Tests') {
