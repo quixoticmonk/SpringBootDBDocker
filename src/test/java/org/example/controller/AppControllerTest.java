@@ -4,6 +4,7 @@ package org.example.controller;
 import org.example.model.Book;
 import org.example.service.AppService;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,18 +34,21 @@ public class AppControllerTest {
     @Autowired
     AppController appController;
 
+    @Tag("unit")
     @Test
     void shouldHaveEndpointWithBooks() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/books"))
                 .andExpect(status().isOk());
     }
 
+    @Tag("unit")
     @Test
     void shouldHaveEndpointForABook() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/books/1"))
                 .andExpect(status().isOk());
     }
 
+    @Tag("unit")
     @Test
     @DisplayName("Should invoke Service Class for Books endpoint")
     void shouldCallServiceForAllBooks(){
@@ -56,6 +60,7 @@ public class AppControllerTest {
         verify(appService,times(1)).returnBooks();
     }
 
+    @Tag("unit")
     @Test
     @DisplayName("Should invoke Service Class for/api/books/{id} endpoint")
     void shouldCallServiceForABookEndPoint(){

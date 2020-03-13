@@ -2,6 +2,7 @@ package org.example;
 
 
 import org.example.controller.AppController;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ public class AppTest
     @Autowired
     private AppController controller;
 
+    @Tag("unit")
     @Test
     public void contextLoads()
     {

@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,11 +17,11 @@ public class AppControllerIntTest {
     @Autowired
     TestRestTemplate restTemplate;
 
+    @Tag("unit")
     @Test
     void shouldHitActualEncpoints(){
         ResponseEntity<String> response=  restTemplate.getForEntity("/api/books", String.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("[{\"id\":1,\"bookName\":\"Davinci Code\",\"authorName\":\"Dan Brown\"},{\"id\":2,\"bookName\":\"Istanbul\",\"authorName\":\"Orhan Pamuk\"}]");
     }
 
 }

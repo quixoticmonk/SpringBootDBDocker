@@ -49,12 +49,12 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        echo"Running Unit tests"
+                        sh"mvn test -Dtest=!TestRunner"
                     }
                 }
                 stage('Running mutation Tests') {
                     steps {
-                        echo"Running Pit tests"
+                        echo"Running Pit tests mvn org.pitest:pitest-maven:mutationCoverage"
                     }
                 }
                 stage('Karate Tests') {

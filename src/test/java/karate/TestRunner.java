@@ -6,6 +6,8 @@ import com.intuit.karate.junit5.Karate;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
+import org.junit.jupiter.api.Tag;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ import java.util.List;
 
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
+
 class TestRunner {
 
+    @Tag("Karate")
     @Karate.Test
     Karate testAll(){
         Results results = Runner.parallel(getClass(), 1);
