@@ -58,17 +58,18 @@ pipeline {
                         sh"mvn test -Dtest=!TestRunner org.jacoco:jacoco-maven-plugin:prepare-agent"
                         junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
                         jacoco execPattern: 'target/**.exec'
+                        publishCoverage adapters: [jacocoAdapter('target/jacoco.exec')], sourceFileResolver: sourceFiles('NEVER_STORE')
                     }
                 }
                 stage('Running mutation Tests') {
                     steps {
                         sh"mvn org.pitest:pitest-maven:mutationCoverage"
-                        //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/pit-reports/**/**', reportFiles: 'index.html', reportName: 'Mutation testing report', reportTitles: ''])
+                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/pit-reports/*/', reportFiles: 'index.html', reportName: 'Mutation testing report', reportTitles: ''])
                     }
                 }
                 stage('container scan') {
                     steps {
-                        sh"trivy -f json -o trivy-results.json springboot-docker:latest"
+                        sh"trivy springboot-docker"
                     }
                 }
                 stage('Dependency Check') {
