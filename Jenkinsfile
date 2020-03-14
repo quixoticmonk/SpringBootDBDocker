@@ -57,6 +57,7 @@ pipeline {
                     steps {
                         sh"mvn test -Dtest=!TestRunner org.jacoco:jacoco-maven-plugin:prepare-agent"
                         junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+                        jacoco execPattern: 'target/**.exec'
                     }
                 }
                 stage('Running mutation Tests') {
