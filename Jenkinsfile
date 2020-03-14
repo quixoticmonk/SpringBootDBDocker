@@ -62,7 +62,7 @@ pipeline {
                 stage('Running mutation Tests') {
                     steps {
                         sh"mvn org.pitest:pitest-maven:mutationCoverage"
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/pit-reports/**/', reportFiles: 'index.html', reportName: 'Mutation testing report', reportTitles: ''])
+                        //publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/pit-reports/**/**', reportFiles: 'index.html', reportName: 'Mutation testing report', reportTitles: ''])
                     }
                 }
                 stage('container scan') {
