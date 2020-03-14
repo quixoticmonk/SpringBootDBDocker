@@ -55,7 +55,7 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh"mvn test -Dtest=!TestRunner jacoco:prepare-agent"
+                        sh"mvn test -Dtest=!TestRunner org.jacoco:jacoco-maven-plugin:prepare-agent"
                         junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
                     }
                 }
