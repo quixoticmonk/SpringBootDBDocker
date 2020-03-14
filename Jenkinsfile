@@ -95,7 +95,7 @@ pipeline {
                     script{
                         env.CF_ENDPOINT=sh label: '', returnStdout: true, script: "cf app ${CF_APPNAME} |grep \"routes\" |cut -d \":\" -f 2|xargs"
                         env.CF_ENDPOINT=env.CF_ENDPOINT.trim()
-                        sh label: '', script:  "sed -e 's@${KARATE_URL}@${CF_ENDPOINT}@g' **/**/karate-config.js"
+                        sh label: '', script:  "sed -i 's@${KARATE_URL}@${CF_ENDPOINT}@g' **/**/karate-config.js"
                     }
                 }
             }
@@ -119,28 +119,6 @@ pipeline {
             }
         }
 
-            stage("Post Deploy Gates") {
-            parallel {
-                stage('Karate Tests') {
-                    steps {
-                        sh "mvn surefire:test -Dtest=TestRunner"
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Karate test run report', reportTitles: ''])
-                    }
-                }
-                stage('Gatling tests') {
-                    steps {
-                        sh "mvn gatling:test"
-                        gatlingArchive()
-                    }
-                }
-
-                stage('Health Check') {
-                    steps {
-                        echo"health check"
-                    }
-                }
-            }
-        }
         stage('Deploy to Pre-prod') {
             steps {
                 echo"deploy to pre-prod"
