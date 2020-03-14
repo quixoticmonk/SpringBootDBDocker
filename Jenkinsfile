@@ -55,12 +55,14 @@ pipeline {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh"mvn test -Dtest=!TestRunner"
+                        sh"mvn test -Dtest=!TestRunner jacoco:prepare-agent"
+                        junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
                     }
                 }
                 stage('Running mutation Tests') {
                     steps {
                         sh"mvn org.pitest:pitest-maven:mutationCoverage"
+                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/pit-reports/**/', reportFiles: 'index.html', reportName: 'Mutation testing report', reportTitles: ''])
                     }
                 }
                 stage('container scan') {
@@ -92,6 +94,7 @@ pipeline {
                     sh "cf push ${CF_APPNAME} -p target/*.jar "
                     script{
                         env.CF_ENDPOINT=sh label: '', returnStdout: true, script: "cf app ${CF_APPNAME} |grep \"routes\" |cut -d \":\" -f 2|xargs"
+                        env.CF_ENDPOINT=env.CF_ENDPOINT.trim()
                         sh label: '', script:  "sed -e 's@${KARATE_URL}@${CF_ENDPOINT}@g' **/**/karate-config.js"
                     }
                 }
