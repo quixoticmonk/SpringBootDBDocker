@@ -42,7 +42,7 @@ pipeline {
         }
         stage('Dockerize the app') {
             steps {
-                sh "docker build . -t springboot-docker -v /var/run/docker.sock:/var/run/docker.sock"
+                sh "docker build . -t springboot-docker"
             }
         }
         stage("Quality Gates") {
