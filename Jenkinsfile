@@ -59,7 +59,7 @@ pipeline {
                 }
                 stage('container scan') {
                     steps {
-                        sh"trivy -f json -0 trivy-results.json springboot-docker:latest"
+                        sh"trivy -f json -o trivy-results.json springboot-docker:latest"
                     }
                 }
                 stage('Dependency Check') {
