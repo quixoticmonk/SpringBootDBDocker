@@ -5,8 +5,8 @@ def CF_ORG = "columbus-apps"
 def CF_SPACE = "jenkins-demo"
 def JOB_NAME = "${env.JOB_NAME}".tokenize('/')[0]
 def BRANCH = "${env.JOB_NAME}".tokenize('/')[1]
-def CF_ENDPOINT =""
 def CF_APPNAME ="jenkins-container-demo"
+def KARATE_URL = 'localhost:8080'
 '''
 ################# USER DEFINED VARIABLES###############################
 '''
@@ -35,6 +35,10 @@ pipeline {
             steps {
                 sh "java -version"
                 sh "mvn -version"
+                script{
+                    env.CF_ENDPOINT=""
+                }
+
             }
         }
         stage('Build') {
@@ -86,10 +90,10 @@ pipeline {
                 withCredentials([string(credentialsId: 'CF_API', variable: 'CF_API'), string(credentialsId: 'CF_USER', variable: 'CF_USER'), string(credentialsId: 'CF_PASS', variable: 'CF_PASS')]) {
                     sh "cf login -a ${CF_API} -u ${CF_USER} -p ${CF_PASS} -o ${CF_ORG} -s ${CF_SPACE} "
                     sh "cf push ${CF_APPNAME} -p target/*.jar "
-                    CF_ENDPOINT =sh(
-                            script:"cf app ${CF_APPNAME} |grep \"routes\" |cut -d \":\" -f 2|xargs",
-                            returnStdout: true)
-
+                    script{
+                        env.CF_ENDPOINT=sh label: '', returnStdout: true, script: "cf app ${CF_APPNAME} |grep \"routes\" |cut -d \":\" -f 2|xargs"
+                        sh label: '', script:  "sed -e 's@${KARATE_URL}@${CF_ENDPOINT}@g' **/**/karate-config.js"
+                    }
                 }
             }
         }
@@ -98,7 +102,7 @@ pipeline {
             parallel {
                   stage('Karate Tests') {
                     steps {
-                        sh "mvn surefire:test -Dtest=TestRunner -D karate.baseUrl=${CF_ENDPOINT}"
+                        sh "mvn surefire:test -Dtest=TestRunner"
                         publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'target/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Karate test run report', reportTitles: ''])
                     }
                 }
