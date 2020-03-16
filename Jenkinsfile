@@ -69,7 +69,7 @@ pipeline {
                 }
                 stage('container scan') {
                     steps {
-                        sh"trivy springboot-docker"
+                        sh"trivy springboot-docker:latest"
                     }
                 }
                 stage('Dependency Check') {
@@ -90,6 +90,7 @@ pipeline {
         }
 
         stage('Deploy to staging') {
+            when { branch 'master' }
             steps {
                 withCredentials([string(credentialsId: 'CF_API', variable: 'CF_API'), string(credentialsId: 'CF_USER', variable: 'CF_USER'), string(credentialsId: 'CF_PASS', variable: 'CF_PASS')]) {
                     sh "cf login -a ${CF_API} -u ${CF_USER} -p ${CF_PASS} -o ${CF_ORG} -s ${CF_SPACE} "
@@ -104,6 +105,7 @@ pipeline {
         }
 
         stage("Post deploy Quality Gates") {
+            when { branch 'master' }
             parallel {
                   stage('Karate Tests') {
                     steps {
