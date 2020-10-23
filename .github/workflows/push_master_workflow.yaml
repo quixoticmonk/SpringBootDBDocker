@@ -29,5 +29,5 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: |
-      -  mvn -B package --file pom.xml -DskipTests=true
-      -  docker build . -t springboot-docker
+        -  mvn -B package --file pom.xml -DskipTests=true
+        -  docker build . -t springboot-docker
