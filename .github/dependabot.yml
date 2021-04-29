@@ -1,0 +1,31 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot:spring-boot-starter-parent
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: org.mockito:mockito-core
+    versions:
+    - 3.7.7
+    - 3.8.0
+  - dependency-name: org.mockito:mockito-junit-jupiter
+    versions:
+    - 3.7.7
+    - 3.8.0
+  - dependency-name: net.masterthought:cucumber-reporting
+    versions:
+    - 5.5.0
+    - 5.5.2
+  - dependency-name: io.gatling.highcharts:gatling-charts-highcharts
+    versions:
+    - 3.5.0
+  - dependency-name: org.scala-lang:scala-library
+    versions:
+    - 2.13.4
